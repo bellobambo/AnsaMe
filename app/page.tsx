@@ -5,11 +5,20 @@ export default async function Home() {
   const user = await getCurrentUser();
 
   return (
-    <div className="grid gap-6">
-      <section className="grid gap-3">
-        <p className="text-sm font-bold uppercase tracking-wide text-black">
-          JAMB. WAEC. NECO.
-        </p>
+    <div className="mx-auto grid w-full max-w-4xl justify-items-center gap-6">
+      <section className="mt-8 grid justify-items-center gap-3 text-center sm:mt-12">
+        {!user ? (
+          <>
+            <p className="text-sm font-bold uppercase tracking-wide text-black">
+              JAMB, WAEC and NECO Standard.
+            </p>
+            <div className="grid gap-1 text-sm font-semibold leading-6 text-black sm:text-base">
+              <p>JAMB: Joint Admissions and Matriculation Board</p>
+              <p>WAEC: West African Examinations Council</p>
+              <p>NECO: National Examinations Council</p>
+            </div>
+          </>
+        ) : null}
         <h1 className="max-w-4xl text-4xl font-black leading-tight text-black sm:text-5xl">
           Practice exam-style questions and review your mistakes.
         </h1>
@@ -19,23 +28,7 @@ export default async function Home() {
           and saves your history for revision.
         </p>
       </section>
-      {user ? (
-        <PracticeBuilder />
-      ) : (
-        <section className="grid gap-3 rounded-lg border border-black bg-[#FAF3E1] p-5 shadow-sm">
-          <h2 className="text-xl font-black text-black">Sign in to start</h2>
-          <p className="max-w-2xl leading-7 text-black">
-            Use Google sign-in so your practice sessions, answers, results, and
-            AI study history stay attached to your own student profile.
-          </p>
-          <a
-            className="w-fit rounded-md bg-black px-4 py-2 font-bold text-[#FAF3E1]"
-            href="/api/auth/google"
-          >
-            Sign in with Google
-          </a>
-        </section>
-      )}
+      {user ? <PracticeBuilder /> : null}
     </div>
   );
 }

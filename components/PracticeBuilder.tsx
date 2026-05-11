@@ -20,6 +20,7 @@ export default function PracticeBuilder() {
   const [topics, setTopics] = useState<string[]>([]);
   const [topic, setTopic] = useState("");
   const [customTopic, setCustomTopic] = useState("");
+  const [useCustomTopic, setUseCustomTopic] = useState(false);
   const [loadingTopics, setLoadingTopics] = useState(false);
   const [starting, setStarting] = useState(false);
 
@@ -48,7 +49,7 @@ export default function PracticeBuilder() {
   }
 
   async function startPractice() {
-    const selectedTopic = customTopic.trim() || topic.trim();
+    const selectedTopic = useCustomTopic ? customTopic.trim() : topic.trim();
 
     if (!selectedTopic) {
       toast.error("Choose a suggested topic or type your own topic.");
@@ -83,11 +84,11 @@ export default function PracticeBuilder() {
   }
 
   return (
-    <section className="grid gap-5 rounded-lg border border-black bg-[#FAF3E1] p-5 shadow-sm">
-      <div className="grid gap-4 md:grid-cols-2">
+    <section className="mx-auto grid w-full max-w-2xl gap-4 rounded-lg border border-black bg-[#FAF3E1] p-4 shadow-sm sm:p-5">
+      <div className="grid gap-4">
         <Field label="Exam type">
           <select
-            className="h-11 rounded-md border border-black px-3"
+            className="h-12 rounded-md border border-black px-4 text-base font-semibold"
             value={examType}
             onChange={(event) => setExamType(event.target.value as ExamType)}
           >
@@ -101,7 +102,7 @@ export default function PracticeBuilder() {
 
         <Field label="Subject">
           <select
-            className="h-11 rounded-md border border-black px-3"
+            className="h-12 rounded-md border border-black px-4 text-base font-semibold"
             value={subject}
             onChange={(event) => {
               setSubject(event.target.value);
@@ -119,7 +120,7 @@ export default function PracticeBuilder() {
 
         <Field label="Difficulty">
           <select
-            className="h-11 rounded-md border border-black px-3"
+            className="h-12 rounded-md border border-black px-4 text-base font-semibold"
             value={difficulty}
             onChange={(event) => setDifficulty(event.target.value as Difficulty)}
           >
@@ -130,28 +131,59 @@ export default function PracticeBuilder() {
             ))}
           </select>
         </Field>
+      </div>
 
-        <Field label="Custom topic">
-          <input
-            className="h-11 rounded-md border border-black px-3"
-            placeholder="Type a topic if it is not listed"
-            value={customTopic}
-            onChange={(event) => setCustomTopic(event.target.value)}
-          />
-        </Field>
+      <div className="grid gap-3">
+        <p className="text-base font-bold text-black">Topic</p>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <button
+            aria-pressed={!useCustomTopic}
+            className={`h-12 rounded-md border-2 border-black px-5 text-base font-bold disabled:opacity-50 ${
+              !useCustomTopic
+                ? "bg-black text-[#FAF3E1]"
+                : "bg-[#FAF3E1] text-black"
+            }`}
+            type="button"
+            onClick={() => {
+              setUseCustomTopic(false);
+              setCustomTopic("");
+              void generateTopics();
+            }}
+            disabled={loadingTopics}
+          >
+            {loadingTopics ? "Generating topics..." : "Suggest 10 topics"}
+          </button>
+          <button
+            aria-pressed={useCustomTopic}
+            className={`h-12 rounded-md border-2 border-black px-5 text-base font-bold ${
+              useCustomTopic
+                ? "bg-black text-[#FAF3E1]"
+                : "bg-[#FAF3E1] text-black"
+            }`}
+            type="button"
+            onClick={() => {
+              setUseCustomTopic(true);
+              setTopic("");
+            }}
+          >
+            Custom topic
+          </button>
+        </div>
+        {useCustomTopic ? (
+          <div className="grid gap-2">
+            <input
+              className="h-12 rounded-md border border-black px-4 text-base font-semibold"
+              placeholder="Type a topic if it is not listed"
+              value={customTopic}
+              onChange={(event) => setCustomTopic(event.target.value)}
+            />
+          </div>
+        ) : null}
       </div>
 
       <div className="flex flex-wrap gap-3">
         <button
-          className="rounded-md border-2 border-black bg-[#FAF3E1] px-4 py-2 font-bold text-black disabled:opacity-50"
-          type="button"
-          onClick={generateTopics}
-          disabled={loadingTopics}
-        >
-          {loadingTopics ? "Generating topics..." : "Suggest 10 topics"}
-        </button>
-        <button
-          className="rounded-md bg-black px-4 py-2 font-bold text-[#FAF3E1] disabled:opacity-50"
+          className="h-12 rounded-md bg-black px-5 text-base font-bold text-[#FAF3E1] disabled:opacity-50"
           type="button"
           onClick={startPractice}
           disabled={starting}
@@ -160,9 +192,9 @@ export default function PracticeBuilder() {
         </button>
       </div>
 
-      {topics.length > 0 ? (
+      {!useCustomTopic && topics.length > 0 ? (
         <div className="grid gap-3">
-          <p className="text-sm font-semibold text-black">
+          <p className="text-base font-semibold text-black">
             Pick a suggested topic or type your own.
           </p>
           <div className="flex flex-wrap gap-2">
@@ -170,7 +202,7 @@ export default function PracticeBuilder() {
               <button
                 key={item}
                 type="button"
-                className={`rounded-full border px-3 py-2 text-sm font-semibold ${
+                className={`rounded-full border px-4 py-2 text-base font-semibold ${
                   item === topic
                     ? "border-black bg-black text-[#FAF3E1]"
                     : "border-black bg-[#FAF3E1] text-black"
@@ -199,7 +231,7 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <label className="grid gap-2 text-sm font-bold text-black">
+    <label className="grid gap-2 text-base font-bold text-black">
       {label}
       {children}
     </label>

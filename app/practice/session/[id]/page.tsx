@@ -37,7 +37,11 @@ export default async function PracticeSessionPage({
           {session.subject} · {session.difficulty} · {session.questions.length} questions
         </p>
       </section>
-      <PracticeSessionForm sessionId={id} questions={session.questions} />
+      <PracticeSessionForm
+        sessionId={id}
+        createdAt={session.createdAt}
+        questions={session.questions}
+      />
     </div>
   );
 }

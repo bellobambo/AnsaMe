@@ -53,7 +53,7 @@ export default function ExplainAnswerButton({
         {loading ? "Explaining..." : "Explain answer"}
       </button>
       {content ? (
-        <div className="grid gap-2 rounded-md border border-black bg-[#FAF3E1] p-4 text-sm leading-6">
+        <div className="grid gap-3 rounded-md border border-black bg-[#FAF3E1] p-5 text-base leading-7">
           <p>{content.explanation}</p>
           <p className="text-black">{content.studentFeedback}</p>
           <p>

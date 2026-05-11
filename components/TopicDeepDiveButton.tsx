@@ -60,7 +60,7 @@ export default function TopicDeepDiveButton({
         {loading ? "Loading guide..." : "Study this topic"}
       </button>
       {content ? (
-        <div className="grid gap-3 rounded-md border border-black bg-[#FAF3E1] p-4 text-sm leading-6">
+        <div className="grid gap-4 rounded-md border border-black bg-[#FAF3E1] p-5 text-base leading-7">
           <p>{content.summary}</p>
           <List title="Key points" items={content.keyPoints} />
           <List title="Common mistakes" items={content.commonMistakes} />
