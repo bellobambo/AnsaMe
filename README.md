@@ -1,6 +1,7 @@
 # AnsaMe
 
-AnsaMe is an AI exam-practice app for Nigerian students preparing for JAMB,
+AnsaMe is an exam practicing pplatform powered by Gemma 4, 
+built specifically for Nigerian students preparing for JAMB,
 WAEC, and NECO. Students sign in with Google, choose an exam, class arm,
 subject, topic, and difficulty, then generate a 20-question practice session
 with Gemma 4. WAEC and NECO sessions also include 4 theory questions. After
