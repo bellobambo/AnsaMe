@@ -15,14 +15,14 @@ Many Nigerian secondary-school students revise with static past-question PDFs,
 limited explanations, and little personalization. AnsaMe turns revision into a
 guided loop:
 
-1. Pick the exam target and class arm: Arts, Science, Commercial, Technical,
+1. Pick the exam type and class arm: Arts, Science, Commercial, Technical,
    General, or Electives.
 2. Choose from related subjects, with core General subjects available across
    the class arms.
 3. Let AI suggest relevant topics, or enter a custom topic.
 4. Generate exam-style multiple-choice questions.
-5. For WAEC and NECO, answer 4 theory questions by typing, uploading a photo of
-   written work, or both.
+5. For WAEC and NECO Standard, 4 theory questions are included and
+   answers can be by typing, uploading a photo of written work, or both.
 6. Submit answers and immediately see correct and incorrect choices.
 7. Use AI explanations, theory feedback, and topic deep-dives to understand the
    weak areas.
