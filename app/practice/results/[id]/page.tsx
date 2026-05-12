@@ -65,6 +65,8 @@ export default async function PracticeResultsPage({
         difficulty={session.difficulty}
         questions={session.questions}
         results={session.results || []}
+        theoryQuestions={session.theoryQuestions || []}
+        theoryResults={session.theoryResults || []}
       />
     </div>
   );

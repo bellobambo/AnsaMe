@@ -1,4 +1,4 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, createPartFromBase64, type Part } from "@google/genai";
 
 const GEMMA_MODEL = "gemma-4-31b-it";
 
@@ -20,4 +20,18 @@ export async function generateWithGemma(prompt: string) {
   });
 
   return response.text ?? "";
+}
+
+export async function generateWithGemmaParts(parts: Array<Part | string>) {
+  const ai = getClient();
+  const response = await ai.models.generateContent({
+    model: GEMMA_MODEL,
+    contents: parts
+  });
+
+  return response.text ?? "";
+}
+
+export function buildImagePart(data: string, mimeType: string) {
+  return createPartFromBase64(data, mimeType);
 }

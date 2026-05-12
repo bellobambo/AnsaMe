@@ -34,13 +34,17 @@ export default async function PracticeSessionPage({
         </p>
         <h1 className="text-3xl font-black text-black">{session.topic}</h1>
         <p className="text-black">
-          {session.subject} · {session.difficulty} · {session.questions.length} questions
+          {session.subject} · {session.difficulty} · {session.questions.length} objective
+          {session.theoryQuestions?.length
+            ? ` · ${session.theoryQuestions.length} theory`
+            : ""}
         </p>
       </section>
       <PracticeSessionForm
         sessionId={id}
         createdAt={session.createdAt}
         questions={session.questions}
+        theoryQuestions={session.theoryQuestions || []}
       />
     </div>
   );

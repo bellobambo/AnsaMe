@@ -43,7 +43,10 @@ export default async function HistoryPage() {
                   {session.examType} {session.subject} · {session.topic}
                 </p>
                 <p className="mt-1 text-sm text-black">
-                  {session.difficulty} · {session.questionCount} questions
+                  {session.difficulty} · {session.questionCount} objective
+                  {session.theoryQuestionCount
+                    ? ` · ${session.theoryQuestionCount} theory`
+                    : ""}
                 </p>
               </div>
               <p className="font-black text-black">

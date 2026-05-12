@@ -20,12 +20,12 @@ export default async function Home() {
           </>
         ) : null}
         <h1 className="max-w-4xl text-4xl font-black leading-tight text-black sm:text-5xl">
-          Practice exam-style questions and review your mistakes.
+          Practice national exam standard questions and review your mistakes.
         </h1>
         <p className="max-w-3xl text-lg leading-8 text-black">
-          Choose an exam, subject, and topic. AnsaMe suggests topics with
-          Gemma 4, creates a 20-question practice session, marks your answers,
-          and saves your history for revision.
+          Choose an exam type, subject, and topic. AnsaMe helps you generate focused
+          practice questions, review your answers, get insight into the correct
+          answers, and expand on them for revision.
         </p>
       </section>
       {user ? <PracticeBuilder /> : null}

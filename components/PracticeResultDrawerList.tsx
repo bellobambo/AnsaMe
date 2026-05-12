@@ -8,7 +8,9 @@ import type {
   Difficulty,
   ExamType,
   PracticeQuestion,
-  PracticeResult
+  PracticeResult,
+  TheoryQuestion,
+  TheoryResult
 } from "@/types/practice";
 
 export default function PracticeResultDrawerList({
@@ -18,7 +20,9 @@ export default function PracticeResultDrawerList({
   topic,
   difficulty,
   questions,
-  results
+  results,
+  theoryQuestions = [],
+  theoryResults = []
 }: {
   sessionId: string;
   examType: ExamType;
@@ -27,6 +31,8 @@ export default function PracticeResultDrawerList({
   difficulty: Difficulty;
   questions: PracticeQuestion[];
   results: PracticeResult[];
+  theoryQuestions?: TheoryQuestion[];
+  theoryResults?: TheoryResult[];
 }) {
   const [activeQuestionIndex, setActiveQuestionIndex] = useState<number | null>(null);
   const resultByQuestion = useMemo(
@@ -38,9 +44,16 @@ export default function PracticeResultDrawerList({
   const activeResult = activeQuestion
     ? resultByQuestion.get(activeQuestion.id)
     : undefined;
+  const theoryResultByQuestion = useMemo(
+    () => new Map(theoryResults.map((result) => [result.questionId, result])),
+    [theoryResults]
+  );
 
   return (
     <section className="grid gap-4">
+      <div className="grid gap-2">
+        <h2 className="text-2xl font-black text-black">Objective review</h2>
+      </div>
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         {questions.map((question, index) => {
           const result = resultByQuestion.get(question.id);
@@ -163,6 +176,70 @@ export default function PracticeResultDrawerList({
           </div>
         ) : null}
       </Drawer>
+
+      {theoryQuestions.length > 0 ? (
+        <section className="grid gap-3">
+          <div className="grid gap-1 border-t border-black pt-5">
+            <h2 className="text-2xl font-black text-black">Theory review</h2>
+            <p className="text-sm font-semibold text-black">
+              Theory answers pass when Gemma marks them at 75% similarity or higher.
+            </p>
+          </div>
+          <div className="grid gap-3">
+            {theoryQuestions.map((question, index) => {
+              const result = theoryResultByQuestion.get(question.id);
+
+              return (
+                <article
+                  className="grid gap-4 rounded-lg border border-black bg-[#FAF3E1] p-5 text-black"
+                  key={question.id}
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <p className="text-lg font-black">Theory {index + 1}</p>
+                    <span
+                      className={`rounded-full px-3 py-1 text-sm font-bold ${
+                        result?.isCorrect
+                          ? "bg-green-100 text-green-800"
+                          : "bg-red-100 text-red-800"
+                      }`}
+                    >
+                      {result?.isCorrect ? "Correct" : "Review"}
+                    </span>
+                  </div>
+                  <p className="text-base font-semibold leading-7">{question.question}</p>
+                  <div className="grid gap-2 rounded-md border border-black p-4">
+                    <p className="text-sm font-black uppercase tracking-wide">
+                      Your answer
+                    </p>
+                    <p className="text-base leading-7">
+                      {result?.studentAnswer || "No typed answer submitted."}
+                    </p>
+                    {result?.submittedImage ? (
+                      <p className="text-sm font-semibold">
+                        A written-answer image was submitted and included in marking.
+                      </p>
+                    ) : null}
+                  </div>
+                  <div className="grid gap-2 rounded-md border border-black p-4">
+                    <p className="text-sm font-black uppercase tracking-wide">
+                      Model answer
+                    </p>
+                    <p className="text-base leading-7">{question.expectedAnswer}</p>
+                  </div>
+                  <div className="grid gap-2">
+                    <p className="text-base font-black">
+                      Similarity: {Math.round(result?.similarity || 0)}%
+                    </p>
+                    <p className="text-base leading-7">
+                      {result?.feedback || "This theory answer was not marked."}
+                    </p>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      ) : null}
     </section>
   );
 }

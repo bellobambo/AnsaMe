@@ -1,7 +1,8 @@
 import type {
   PracticeQuestion,
   PracticeResult,
-  StudentAnswers
+  StudentAnswers,
+  TheoryResult
 } from "@/types/practice";
 
 export function markPractice(
@@ -23,5 +24,19 @@ export function markPractice(
     score: results.filter((result) => result.isCorrect).length,
     total: questions.length,
     results
+  };
+}
+
+export function combinePracticeMarks(
+  objectiveResults: ReturnType<typeof markPractice>,
+  theoryResults: TheoryResult[]
+) {
+  const theoryScore = theoryResults.filter((result) => result.isCorrect).length;
+
+  return {
+    score: objectiveResults.score + theoryScore,
+    total: objectiveResults.total + theoryResults.length,
+    results: objectiveResults.results,
+    theoryResults
   };
 }

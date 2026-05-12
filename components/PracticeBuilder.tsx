@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import {
   DEFAULT_QUESTION_COUNT,
+  DEPARTMENTS,
   DIFFICULTIES,
   EXAM_TYPES,
-  SUBJECTS,
+  getSubjectsForDepartment,
+  type Department,
   type Difficulty,
   type ExamType
 } from "@/types/practice";
@@ -15,7 +17,8 @@ import {
 export default function PracticeBuilder() {
   const router = useRouter();
   const [examType, setExamType] = useState<ExamType>("JAMB");
-  const [subject, setSubject] = useState("Biology");
+  const [department, setDepartment] = useState<Department | "">("");
+  const [subject, setSubject] = useState("");
   const [difficulty, setDifficulty] = useState<Difficulty>("Medium");
   const [topics, setTopics] = useState<string[]>([]);
   const [topic, setTopic] = useState("");
@@ -23,8 +26,17 @@ export default function PracticeBuilder() {
   const [useCustomTopic, setUseCustomTopic] = useState(false);
   const [loadingTopics, setLoadingTopics] = useState(false);
   const [starting, setStarting] = useState(false);
+  const departmentSubjects = useMemo(
+    () => (department ? getSubjectsForDepartment(department) : []),
+    [department]
+  );
 
   async function generateTopics() {
+    if (!department || !subject) {
+      toast.error("Select a class arm and subject first.");
+      return;
+    }
+
     setLoadingTopics(true);
 
     try {
@@ -100,23 +112,65 @@ export default function PracticeBuilder() {
           </select>
         </Field>
 
-        <Field label="Subject">
+        <Field label="Class arm">
           <select
             className="h-12 rounded-md border border-black px-4 text-base font-semibold"
-            value={subject}
+            value={department}
             onChange={(event) => {
-              setSubject(event.target.value);
+              const nextDepartment = event.target.value as Department | "";
+
+              if (!nextDepartment) {
+                setDepartment("");
+                setSubject("");
+                setTopics([]);
+                setTopic("");
+                setCustomTopic("");
+                return;
+              }
+
+              const nextSubjects = getSubjectsForDepartment(nextDepartment);
+
+              setDepartment(nextDepartment);
+              setSubject(nextSubjects[0]);
               setTopics([]);
               setTopic("");
+              setCustomTopic("");
             }}
           >
-            {SUBJECTS.map((item) => (
+            <option value="">Select Class Arm</option>
+            {DEPARTMENTS.map((item) => (
               <option key={item} value={item}>
                 {item}
               </option>
             ))}
           </select>
         </Field>
+
+        {department ? (
+          <div className="grid gap-2">
+            <p className="text-base font-bold text-black">Subjects in this arm</p>
+            <div className="flex flex-wrap gap-2">
+              {departmentSubjects.map((item) => (
+                <button
+                  className={`rounded-full border px-3 py-2 text-sm font-bold ${
+                    item === subject
+                      ? "border-black bg-black text-[#FAF3E1]"
+                      : "border-black bg-[#FAF3E1] text-black"
+                  }`}
+                  key={item}
+                  type="button"
+                  onClick={() => {
+                    setSubject(item);
+                    setTopics([]);
+                    setTopic("");
+                  }}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : null}
 
         <Field label="Difficulty">
           <select
@@ -188,7 +242,11 @@ export default function PracticeBuilder() {
           onClick={startPractice}
           disabled={starting}
         >
-          {starting ? "Creating practice..." : `Start ${DEFAULT_QUESTION_COUNT} questions`}
+          {starting
+            ? "Creating practice..."
+            : examType === "JAMB"
+              ? `Start ${DEFAULT_QUESTION_COUNT} questions`
+              : `Start ${DEFAULT_QUESTION_COUNT} objective + 4 theory`}
         </button>
       </div>
 
