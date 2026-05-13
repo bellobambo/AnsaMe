@@ -1,13 +1,10 @@
 # AnsaMe
 
-AnsaMe is an assessment platform powered by Gemma 4, 
-built specifically for Nigerian students preparing for JAMB,
+AnsaMe is an assessment platform built with Gemma 4, 
+Its specifically for Nigerian students preparing for JAMB,
 WAEC, and NECO. Students sign in with Google, choose an exam, class arm,
 subject, topic, and difficulty, then generate a 20-question practice session
-with Gemma 4. WAEC and NECO sessions also include 4 theory questions. After
-answering, they can review their score, inspect each mistake, request a simple
-answer explanation, open a focused topic study guide, and revisit past practice
-sessions.
+with Gemma 4. WAEC and NECO sessions also include 4 theory questions. After answering, students can review their score, check where they made mistakes, request a simple answer explanation, dive deep into the topic study guide, and revisit past practice sessions.
 
 ## Problem
 
