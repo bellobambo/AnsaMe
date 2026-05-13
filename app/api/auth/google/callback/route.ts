@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getApiErrorMessage } from "@/lib/apiErrors";
 import { authCookies, createSessionToken } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 
@@ -114,7 +115,12 @@ export async function GET(request: Request) {
     return response;
   } catch (error) {
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Unable to sign in with Google" },
+      {
+        error: getApiErrorMessage(
+          error,
+          "We could not complete Google sign-in. Please try again."
+        )
+      },
       { status: 400 }
     );
   }

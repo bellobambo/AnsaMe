@@ -160,12 +160,14 @@ export default function PracticeResultDrawerList({
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <ExplainAnswerButton
+                  key={`explain-${activeQuestion.id}`}
                   sessionId={sessionId}
                   questionId={activeQuestion.id}
                 />
               </div>
               <div className="flex justify-end">
                 <TopicDeepDiveButton
+                  key={`deep-dive-${activeQuestion.id}-${activeQuestion.topicTag || topic}`}
                   examType={examType}
                   subject={subject}
                   topic={activeQuestion.topicTag || topic}

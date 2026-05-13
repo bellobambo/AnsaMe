@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Drawer } from "antd";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { getClientErrorMessage } from "@/lib/clientErrors";
 import type {
   PracticeQuestion,
   QuestionOption,
@@ -136,9 +137,15 @@ export default function PracticeSessionForm({
       }
 
       window.localStorage.removeItem(draftKey);
+      toast.success("Answers submitted.");
       router.push(`/practice/results/${sessionId}`);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Unable to submit practice");
+      toast.error(
+        getClientErrorMessage(
+          err,
+          "We could not submit your answers right now. Please try again."
+        )
+      );
     } finally {
       setSubmitting(false);
     }

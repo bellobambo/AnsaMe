@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import { NextResponse } from "next/server";
+import { getApiErrorMessage } from "@/lib/apiErrors";
 import { requireApiUser } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { generateWithGemma } from "@/lib/gemma";
@@ -70,7 +71,12 @@ export async function POST(request: Request) {
     return NextResponse.json(content);
   } catch (error) {
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Unable to explain answer" },
+      {
+        error: getApiErrorMessage(
+          error,
+          "We could not explain this answer right now. Please try again."
+        )
+      },
       { status: 400 }
     );
   }

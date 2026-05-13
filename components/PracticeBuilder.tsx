@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { getClientErrorMessage } from "@/lib/clientErrors";
 import {
   DEFAULT_QUESTION_COUNT,
   DEPARTMENTS,
@@ -53,8 +54,14 @@ export default function PracticeBuilder() {
 
       setTopics(data.topics);
       setTopic(data.topics[0] || "");
+      toast.success("Topics generated.");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Unable to generate topics");
+      toast.error(
+        getClientErrorMessage(
+          err,
+          "We could not generate topics right now. Please try again."
+        )
+      );
     } finally {
       setLoadingTopics(false);
     }
@@ -87,9 +94,15 @@ export default function PracticeBuilder() {
         throw new Error(data.error || "Unable to create practice session");
       }
 
+      toast.success("Practice session created.");
       router.push(`/practice/session/${data.sessionId}`);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Unable to create practice session");
+      toast.error(
+        getClientErrorMessage(
+          err,
+          "We could not create your practice session. Please try again."
+        )
+      );
     } finally {
       setStarting(false);
     }

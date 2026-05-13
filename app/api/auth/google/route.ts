@@ -10,7 +10,7 @@ export async function GET(request: Request) {
 
   if (!clientId) {
     return NextResponse.json(
-      { error: "Missing GOOGLE_CLIENT_ID environment variable" },
+      { error: "Google sign-in is not available right now. Please try again later." },
       { status: 500 }
     );
   }

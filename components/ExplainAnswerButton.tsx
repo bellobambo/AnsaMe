@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { getClientErrorMessage } from "@/lib/clientErrors";
 
 type Explanation = {
   explanation: string;
@@ -35,8 +36,14 @@ export default function ExplainAnswerButton({
       }
 
       setContent(data);
+      toast.success("Answer explanation ready.");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Unable to explain answer");
+      toast.error(
+        getClientErrorMessage(
+          err,
+          "We could not explain this answer right now. Please try again."
+        )
+      );
     } finally {
       setLoading(false);
     }

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { getClientErrorMessage } from "@/lib/clientErrors";
 import type { Difficulty, ExamType } from "@/types/practice";
 
 type DeepDive = {
@@ -42,8 +43,14 @@ export default function TopicDeepDiveButton({
       }
 
       setContent(data);
+      toast.success("Topic guide ready.");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Unable to create topic guide");
+      toast.error(
+        getClientErrorMessage(
+          err,
+          "We could not create this topic guide right now. Please try again."
+        )
+      );
     } finally {
       setLoading(false);
     }

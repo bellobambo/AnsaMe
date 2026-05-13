@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getApiErrorMessage } from "@/lib/apiErrors";
 import { requireApiUser } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { generateWithGemma } from "@/lib/gemma";
@@ -57,7 +58,12 @@ export async function POST(request: Request) {
     return NextResponse.json(content);
   } catch (error) {
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Unable to create topic guide" },
+      {
+        error: getApiErrorMessage(
+          error,
+          "We could not create this topic guide right now. Please try again."
+        )
+      },
       { status: 400 }
     );
   }

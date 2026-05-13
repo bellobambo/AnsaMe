@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getApiErrorMessage } from "@/lib/apiErrors";
 import { requireApiUser } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { generateWithGemma } from "@/lib/gemma";
@@ -88,7 +89,12 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Unable to generate questions" },
+      {
+        error: getApiErrorMessage(
+          error,
+          "We could not create your practice session right now. Please try again."
+        )
+      },
       { status: 400 }
     );
   }

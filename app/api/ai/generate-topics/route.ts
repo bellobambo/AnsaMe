@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getApiErrorMessage } from "@/lib/apiErrors";
 import { requireApiUser } from "@/lib/auth";
 import { generateWithGemma } from "@/lib/gemma";
 import { parseModelJson } from "@/lib/json";
@@ -59,7 +60,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Unable to generate topics" },
+      { error: getApiErrorMessage(error, "We could not generate topics right now. Please try again.") },
       { status: 400 }
     );
   }
